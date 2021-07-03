@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { RootState } from '../../store'
 import { getCovid } from '../../api'
@@ -5,7 +6,7 @@ import { LoadingThunk } from '../../types'
 
 //Define interface fot initial state
 interface CovidState {
-  data: null
+  data: any
   loading: LoadingThunk
   error: boolean
 }
@@ -55,7 +56,7 @@ export const covidSlice = createSlice({
 export const { resetLoading } = covidSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCovid = (state: RootState): null => state.covid.data;
+export const selectCovid = (state: RootState): Record<string, unknown> => state.covid.data;
 
 
 export default covidSlice.reducer

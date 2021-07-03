@@ -10,7 +10,9 @@ import Document, {
 } from 'next/document'
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps> {
     const initialProps = await Document.getInitialProps(ctx)
 
     return initialProps
@@ -19,16 +21,7 @@ class MyDocument extends Document {
   render(): ReactElement {
     return (
       <Html>
-        <Head>
-          <link
-            rel="stylesheet"
-            href="/node_modules/reveal.js/dist/reveal.css"
-          />
-          <link
-            rel="stylesheet"
-            href="/node_modules/reveal.js/dist/theme/black.css"
-          />
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
