@@ -6,19 +6,21 @@ import { LoadingThunk } from '../../types'
 
 //Define interface fot initial state
 interface CovidState {
-  data: any
+  data: any,
   loading: LoadingThunk
   error: boolean
 }
 
 // Define async thunk
-export const getData = createAsyncThunk(
-  'covid/getData',
-  async () => {
-    const response = await getCovid();
-    return response
-  }
-)
+export const getData = createAsyncThunk('covid/getData', async () => {
+  const response = await getCovid()
+  return response
+})
+
+// export const getDataProvince = createAsyncThunk('covid/getDataProvince', async () => {
+//   const response = await getCovidProvince()
+//   return response
+// })
 
 // Define the initial state using that type
 export const initialState: CovidState = {
@@ -28,7 +30,7 @@ export const initialState: CovidState = {
 }
 
 export const covidSlice = createSlice({
-  name: 'school',
+  name: 'covid',
   initialState,
   reducers: {
     resetLoading: (state) => {
@@ -37,26 +39,25 @@ export const covidSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getData.pending, (state) => {
-      state.loading = 'pending';
-    });
+      state.loading = 'pending'
+    })
 
     builder.addCase(getData.fulfilled, (state, { payload }) => {
-      state.data = payload;
-      state.loading = 'success';
-    });
+      state.data = payload
+      state.loading = 'success'
+    })
 
     builder.addCase(getData.rejected, (state) => {
-      state.loading = 'failed';
+      state.loading = 'failed'
       state.error = true
-    });
-
+    })
   }
 })
 
 export const { resetLoading } = covidSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCovid = (state: RootState): Record<string, unknown> => state.covid.data;
-
+export const selectCovid = (state: RootState): Record<string, unknown> =>
+  state.covid.data
 
 export default covidSlice.reducer

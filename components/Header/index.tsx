@@ -20,9 +20,6 @@ export default function Header(): ReactElement {
             <Link href="/">Beranda</Link>
           </li>
           <li>
-            <Link href="/">Vaksin</Link>
-          </li>
-          <li>
             <Link href="/">Tentang</Link>
           </li>
         </ul>
