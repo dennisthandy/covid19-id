@@ -6,7 +6,7 @@ import { LoadingThunk } from '../../types'
 
 //Define interface fot initial state
 interface CovidState {
-  data: any,
+  data: any
   loading: LoadingThunk
   error: boolean
 }
@@ -16,11 +16,6 @@ export const getData = createAsyncThunk('covid/getData', async () => {
   const response = await getCovid()
   return response
 })
-
-// export const getDataProvince = createAsyncThunk('covid/getDataProvince', async () => {
-//   const response = await getCovidProvince()
-//   return response
-// })
 
 // Define the initial state using that type
 export const initialState: CovidState = {
@@ -59,5 +54,15 @@ export const { resetLoading } = covidSlice.actions
 // Other code such as selectors can use the imported `RootState` type
 export const selectCovid = (state: RootState): Record<string, unknown> =>
   state.covid.data
+
+export const selectFilteredRegions = (
+  state: RootState,
+  search: string
+): any => {
+  const regions = state.covid.data?.regions
+  return regions?.filter((region: any) =>
+    region.name.toLowerCase().replace(/\s/g, '').includes(search.toLowerCase())
+  )
+}
 
 export default covidSlice.reducer

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ReactElement } from 'react'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { formatDate } from '../lib'
-import { getData } from '../lib/slices/covid'
+import { getData, selectFilteredRegions } from '../lib/slices/covid'
 import Layout from '../components/Layout'
 import Card from '../components/Card'
 import Province from '../components/Province'
@@ -11,38 +11,27 @@ import Province from '../components/Province'
 export default function Home(): ReactElement {
   const dispatch = useAppDispatch()
   const { data, loading, error } = useAppSelector((state) => state.covid)
-  const [search, setSearch] = useState<string>('')
-  const [regions] = useState(data?.regions)
-  const [filteredRegions, setFilteredRegions] = useState([])
+  const [search, setSearch] = useState('')
+  const regions = useAppSelector(state => selectFilteredRegions(state, search)) 
 
   useEffect(() => {
     dispatch(getData())
   }, [dispatch])
 
-  useEffect(() => {
-    setFilteredRegions(
-      regions?.filter((region: any) =>
-        region.name
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(search.toLowerCase())
-      )
-    )
-  }, [search, regions])
 
   if (loading === 'pending') {
     return (
-      <div>
+      <Layout>
         <h1>Loading...</h1>
-      </div>
+      </Layout>
     )
   }
 
   if (error) {
     return (
-      <div>
+      <Layout>
         <h1>Error</h1>
-      </div>
+      </Layout>
     )
   }
 
@@ -61,7 +50,7 @@ export default function Home(): ReactElement {
 
       <div className="mt-8 grid place-items-center gap-5 md:grid-cols-2 xl:grid-cols-4">
         <Card
-          label="Terinfeksi"
+          label="Terkonfirmasi"
           cases={data?.numbers?.infected}
           color="bg-yellow-600"
         />
@@ -108,11 +97,18 @@ export default function Home(): ReactElement {
           <label htmlFor="cari" className="absolute top-3 left-3 opacity-50">
             Cari Provinsi
           </label>
+          <style jsx>
+            {`
+              input[type="text"]:focus + label {
+                opacity: 0;
+              }
+            `}
+          </style>
         </div>
       </div>
 
       <div className="mt-8 grid place-content-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5">
-        {filteredRegions?.map((province: any, index: number) => {
+        {regions?.map((province: any, index: number) => {
           return (
             <Province
               key={index}
